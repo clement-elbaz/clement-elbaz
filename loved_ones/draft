@@ -1,0 +1,60 @@
+Mourning our loved ones, one password at a time
+
+===
+<i>January 2020</i>
+
+This is a story about love, death, and friendship. It is also one of the most interesting infosec stories I've been involved in.
+
+It starts with a tragedy. Last August one of my best friends &mdash; let us call her F. &mdash; suddenly lost her life partner &mdash; let us call him G. &mdash; from a heart attack. He was 37. They had been sharing each other's live for more than a decade.
+
+Before going further I would like to pay homage to both of them. They're wonderful and inspiring people that I feel lucky to have met.
+
+Anyone who faced the loss of a loved one knows how grueling and difficult the first months are. F.'s friends and I did (and still do) our best to assist her any way we can in the many challenges she faces in this ordeal, be them emotional or logistical. A few months in, F. reached out with a question: the passing had happened while they were on vacations and G. had taken many photographs on his smartphone during his last days. She wanted to take a look at these but realized she could not. She had neither the phone passcode (G. mostly used his fingerprints to unlock his phone) nor access to G.'s Google account where they might have been uploaded.
+
+A couple of us software engineers friends looked into it and quickly realized this would prove difficult: the phone was a Nexus 5X, the first Android model with full disk encryption enabled by default, in similar fashion that the iPhone. Moreover, the phone was set to erase all data after too many wrong codes, and only 8 or 9 attempts were remaining. We handed back the phone and told her we could not help her on that one.
+
+But these photographs kept nagging me. I work in defensive computer security all day long &mdash; though I had not dabble in offensive security since my teenager days &mdash; and I keep hearing statements such as &lsquo;Everything is broken&rsquo; or &lsquo;You can not defend against a well funded attacker&rsquo; and here I was, giving up after a cursory look at an encrypted phone?
+
+I decided that I would be both a good friend and a good security engineer, and in November I launched a full scale offensive security operation to gain access to these photographs any way I could.
+
+This is the story of everything I tried, and how I succeeded.
+
+===
+Reconnaissance
+
+F. and I took a tour of G.'s digital life. G. was a GPU programmer &mdash; and a good one at that &mdash;, a detail that will matter later in this story. That meant that I could expect him to be tech-savvy though not necessarily focused on security. We identified three things we did not have immediate access to:
+
+<ol>
+	<li>G.'s aforementioned Nexus 5X contained the coveted photographs but was protected by a numerical passcode of unknown length, with a limited number of attempts left. Since the passing, the phone shut down at least once when its battery ran out.</li>
+	<li>G.'s Google Account. It was plausible (but not certain) that the photographs could have been successfully uploaded to the cloud before the phone shut down.</li>
+	<li>G.'s session on his Windows personal computer was protected by an unknown password. F. also had an unprotected session on the same computer she used once in a while.</li>
+</ol>
+
+My first pick was the PC as it seemed to be the easiest target and had a decent chance to have an active session towards the Google account.
+
+===
+Attempt #1: Attacking the sessions
+
+Bypassing the Windows password proved easy. As F. told me she could sign into her session from boot without any password, I deduced the computer had no full disk encryption scheme set up. I booted using a Debian live CD, accessed G.'s files, copied his Chrome and Firefox profiles into somewhere they could be read publicly, booted back into Windows, and started Chrome and Firefox from F.'s session using G.'s profiles. All of G.'s tabs, bookmarks and browser history appeared before us, but unfortunately most of the sessions had been invalidated. As four months had passed since the death, they most likely expired but I still wonder if I could have triggered some <a href="https://en.wikipedia.org/wiki/Device_fingerprint">browser fingerprinting</a> detection mechanism on Google's side by using a browser profile from a different Windows session on the same computer (fingerprinting detection is also the reason I did not use the browser profiles directly from my Debian live CD).
+
+Later I realized that I could have made sure to have zero fingerprinting issues by using a tool such as<a href="http://manpages.ubuntu.com/manpages/trusty/man8/chntpw.8.html">chntpw</a> to erase G.'s password using a live CD then log directly to his (now password-free) session. Alas, I had not done that: the sessions were now invalidated either by expiration or by my fault.
+
+===
+Attempt #2: Attacking the phone's full disk encryption
+
+I keep telling people that high-end Android phones and all iPhones since the 5S are basically fortresses (as long as they are kept up to date). This was now the time to check if this assumption hold true in practice. I began gathering material about any public vulnerability affecting Android or the Nexus 5X that could help me breaking the phone encryption.
+
+One of the most promising vulnerabilities I encountered was IBM's <a href="https://exchange.xforce.ibmcloud.com/collection/Google-Nexus-5X-Bootloader-Unauthorized-Memory-Dumping-via-USB-334310227a1065ee7585b37e4d3be0a3">XFID-116494</a>: on a Nexus 5X with vulnerable firmware it is possible to trigger a memory dump over USB by crashing the phone using the ADB interface. This memory dump happened to contains the passcode. Unfortunately, Google issued a firmware update for this problem even before IBM's disclosure. I did try to reproduce it on G.'s phone, to no avail.
+
+After that I splitted the problem in two: getting access to the encrypted data, and decrypting the data.
+
+Simply exfiltrating the encrypted data &mdash; without even decrypting it &mdash; from the locked phone proved daunting. The Nexus 5X does not have any removable storage where the photographs might have resided (encrypted or not). I did not find any public way to trigger a data exflitration in software. I began considering the possibility to do that in hardware: the <a href="https://www.ifixit.com/Teardown/Nexus+5X+Teardown/51318">iFixit teardown of the Nexus 5X</a> showed that the storage of the Nexus 5X is build on a <a href="http://toshiba.semicon-storage.com/info/docget.jsp?did=12587">Toshiba THGBMFG7C2LBAIL</a> chip. Could it be possible to unsolder this chip and read the data back? Amir Etemadieh, CJ Heres, Khoa Hoang <a href="https://www.blackhat.com/docs/us-17/wednesday/us-17-Etemadieh-Hacking-Hardware-With-A-$10-SD-Card-Reader-wp.pdf">did a presentation about reading chips from various Android phones at Black Hat 2017</a>. Unfortunately, to the best of my knowledge nobody has documented a public attempt at doing the same for a Nexus 5X and I would way out of my depth trying to do it alone.
+
+Even if I did have access to the encrypted data, could I find an attack to break its encryption? In 2016 Gal Beniamini showed that <a href="http://bits-please.blogspot.com/2016/06/extracting-qualcomms-keymaster-keys.html">50% of Android phones were vulnerable to out-of-phone decryption</a> because of a hardware design flaw in Qualcomm's KeyMaster module: on vulnerable designs, it was possible to exfiltrate the master hardware seed used in conjonction with the passcode to generate the decryption key, leaving only the passcode itself to be brute-forced. At billions of attempts per second, any numerical passcode would get cracked in minutes or even seconds. Unfortunately, the Nexus 5X was not a vulnerable design.
+
+As I winded down my efforts on the phone itself, I realized how uneven Android security is. Most low or mid-range phones can be broken into fairly easily, while breaking into a high-end model will most likely require the use of one or several pricey zero-day vulnerabilities. Choose your phone wisely (or use an iPhone).
+
+===
+Attempt #3: Attacking the passwords
+
+
