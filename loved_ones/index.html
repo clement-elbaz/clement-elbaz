@@ -27,7 +27,7 @@
 		</style>
 	</head>
 	<body>
-		<h1>Mourning our loved ones <br>One password at a time</h1>
+		<h1>Mourning our loved ones <br>one password at a time</h1>
 
 		<p><i>January 2020</i></p>
 
@@ -80,7 +80,7 @@
 		<p>After that I splitted the problem in two: getting access to the encrypted data, and decrypting the data.</p>
 
 		<p>Simply exfiltrating the encrypted data &mdash; without even decrypting it &mdash; from the locked phone proved daunting. The Nexus 5X does not have any removable storage where the pictures might have resided (encrypted or not). I did not find any publicly known way to trigger a data exfiltration from software while the phone was still locked.</p>
-		<p>I contemplated the possibility of doing it in hardware: looking at the <a href="https://www.ifixit.com/Teardown/Nexus+5X+Teardown/51318">iFixit teardown of the Nexus 5X</a> I learned that the storage of the Nexus 5X is built on a <a href="http://toshiba.semicon-storage.com/info/docget.jsp?did=12587">Toshiba chip</a>. Could it be possible to unsolder this chip and read the data back? It seems so: Amir Etemadieh, CJ Heres, Khoa Hoang did exactly that on various Android phones and talked about it <a href="https://www.blackhat.com/docs/us-17/wednesday/us-17-Etemadieh-Hacking-Hardware-With-A-$10-SD-Card-Reader-wp.pdf">at Black Hat 2017</a>. Unfortunately, to the best of my knowledge nobody has documented a public attempt at doing the same for a Nexus 5X and I would be way out of my depth trying to do it alone.</p>
+		<p>I contemplated the possibility of doing it in hardware: reading the <a href="https://www.ifixit.com/Teardown/Nexus+5X+Teardown/51318">iFixit teardown of the Nexus 5X</a> I learned the storage of the Nexus 5X is built on a Toshiba chip whose <a href="http://toshiba.semicon-storage.com/info/docget.jsp?did=12587">specification</a> is available. Could it be possible to unsolder this chip and read the data back? It seems so: Amir Etemadieh, CJ Heres, Khoa Hoang did something close on various Android phones then talked about it <a href="https://www.blackhat.com/docs/us-17/wednesday/us-17-Etemadieh-Hacking-Hardware-With-A-$10-SD-Card-Reader-wp.pdf">during Black Hat 2017</a>. Unfortunately, to the best of my knowledge nobody has documented a public attempt at doing the same for a Nexus 5X and I would be way out of my depth trying to do it alone.</p>
 
 		<p>Even if I did have access to the encrypted data, would I find an attack to break its encryption? In 2016 Gal Beniamini showed that <a href="http://bits-please.blogspot.com/2016/06/extracting-qualcomms-keymaster-keys.html">50% of Android phones were vulnerable to out-of-phone decryption</a> because of a hardware design flaw in Qualcomm's KeyMaster module: on vulnerable designs, it was possible to exfiltrate the master hardware seed used in conjonction with the passcode to generate the decryption key, leaving only the passcode itself to be brute-forced. At billions of attempts per second, any numerical passcode would get cracked in minutes if not seconds. Unfortunately, the Nexus 5X was not a vulnerable design.</p>
 
@@ -90,7 +90,7 @@
 
 		<p>I realized I had made a mistake in my mental model of the situation: so far I had reasoned as if <i>G</i> had a perfect password hygiene all the time. While it is theoretically possible to only use strong, unique passwords &mdash; and you can get very close to that by using a password manager &mdash; this is not how most people use passwords. Usually they'll rotate between a bunch of passwords, strong or not, and at most they will add a prefix or suffix to a common root to make them &lsquo;unique&rsquo; (a tactic that might be effective at repelling basic automated attacks but not dedicated attackers like I was now).</p>
 
-		<p>When he was alive <i>G</i> never striked me as someone paranoid about security and I never heard him talking about a password manager. The password hint for his Windows session was literally &ldquo;as usual&rdquo; which strongly suggested a pattern of password reuse.</p>
+		<p>When he was alive <i>G</i> never striked me as someone paranoid about security and I never heard him talking about using a password manager. The password hint for his Windows session was literally &ldquo;as usual&rdquo; which strongly suggested a pattern of password reuse.</p>
 
 		<p>The new plan was:</p>
 		<ol>
@@ -110,34 +110,34 @@
 
 		<ul>
 			<li>
-			<a href="https://haveibeenpwned.com/">Have I Been Pwned</a> informed me that <i>G</i>'s email address was found in no less than 15 security breaches. That meant that passwords of him &mdash; or at least their hashes &mdash; were out there. I started looking for the original data for these breaches, starting with the most gigantic of them all: <a href="https://www.troyhunt.com/the-773-million-record-collection-1-data-reach/">Collection #1</a>.
-			773 millions unique email addresses, 1.16 <i>billions</i> unique combinations of email addresses and passwords, 80 gigabytes of data, Collection #1 is <i>big</i>.
-			<br>Still the original dataset is dreadfully easy to find and poking inside I found a dozen entries for <i>G</i> email address, all of them with the same brute-forced password: a weak password made of four letters followed by four numbers. However I also found that Collection #1 contained some errors (associated with my email address were two old but legitimate passwords of mine but also two passwords I had never used). While there was a strong possibility that this was a password used by <i>G</i> I had no proof of that yet.
+			Using <a href="https://haveibeenpwned.com/">Have I Been Pwned</a> I learned that <i>G</i>'s email address was found in no less than 15 security breaches. That meant that passwords of his &mdash; or at least their cryptographic hashes &mdash; were out there. I started looking for the original data for these breaches, starting with the most gigantic of them all: <a href="https://www.troyhunt.com/the-773-million-record-collection-1-data-reach/">Collection #1</a>.
+			773 millions unique email addresses, 1.16 billions unique combinations of email addresses and passwords, 80 gigabytes of data, Collection #1 is <i>big</i>.
+			<br>The original dataset is dreadfully easy to find and while poking inside I found a dozen entries for <i>G</i> email address, all of them with the same cracked password: a weak password made of four letters followed by four numbers. However I also found that Collection #1 contained some errors (my own email address was associated with two real passwords of mine but also two passwords I had never used). There was a strong possibility this was an actual password of <i>G</i> but I had no proof yet.
 			</li>
 			<li>
 				Suddenly I was very happy to not have erased <i>G</i>'s Windows session password using chntpw. I tried entering the Collection #1 password in the Windows session login and it did not work. That meant that <i>G</i> used at least one password I was not aware of, and I still had work to do before being confident enough to proceed with an attempt at guessing the Google password.
 				<br>Once again booting on a Linux live OS, I used <a href="https://linux.die.net/man/1/samdump2">samdump2</a> to extract the hash of <i>G</i>'s Windows session password from his computer. Most versions of Windows store password hashes through a scheme called <a href="https://en.wikipedia.org/wiki/NT_LAN_Manager">NTLM</a> that can be brute-forced quite efficiently: even my five-year-old GPU could attempt 2 to 3 billions guesses per second using <a href="https://hashcat.net/hashcat/">Hashcat</a> in NTLM mode. 
 
-				Moreover, as a GPU programmer <i>G</i> had a decent GPU on his home machine and <i>F</i> had no problems with letting the PC working a few weeks non-stop if necessary. I was using <i>G</i>'s own hardware against his own password.
-			<br>Still, cracking a (potentially) strong password would not be accomplished through a pure brute-force effort and I gathered (and devised myself) multiple common passwords patterns that I would try against the NTLM hash. 
+				Moreover, as a GPU programmer <i>G</i> had a decent GPU on his home machine and <i>F</i> had no problems letting the PC work a few weeks non-stop. I was using <i>G</i>'s own hardware to crack his own password.
+				<br>Still, cracking a (potentially) strong password would not be accomplished through a pure brute-force effort and I started thinking about the most likely password patterns <i>G</i> could have used. 
 			</li>
 		</ul>
 
 		<p>In the middle of all that, I thought again of the Collection #1 password. More specifically its pattern: four letters and four numbers.</p>
 
-		<p>Four numbers. I then remembered the Nexus 5X and its numerical passcode of unknown length. While phone only had 6 remaining attempts and this was a long shot, I tried entering the four numbers of the Collection #1 password as a passcode for the phone. And&hellip; <strong>it worked</strong>.</p>
+		<p>Four numbers. I then remembered the Nexus 5X and its numerical passcode of unknown length. While phone only had 6 remaining attempts and this was a long shot, I tried entering the four numbers of the Collection #1 password as the passcode for the phone. And&hellip; <strong>it worked</strong>.</p>
 
 		<p>The phone was now unlocked, and all the data was there. The timestamp of the last photo was less than 8 hours before the passing.</p>
 
-		<p>Words fail to describe the conflicting feelings I experienced in this moment. The hacker's jubilation of finally getting inside after weeks of effort and uncertainty; the brutal reminder of what all of this was for; the feeling of violating a deceased friend's intimacy.</p>
+		<p>Words fail to describe the conflicting feelings I experienced in this moment. The hacker's jubilation of finally getting inside after weeks of effort and uncertainty; the brutal reminder of what all of this was for; the satisfaction of having helped a friend; the nagging feeling of violating another deceased friend's intimacy.</p>
 
-		<p>I will remember this moment for a long time.</p>
+		<p>Good or bad, I will remember this moment for a long time.</p>
 
 		<h2>Conclusion: Christmas Day</h2>
 
-		<p>Once I was certain all the data was intact, I shut down the phone and called <i>F</i> to tell her the news. Soon after she came over to discover the coveted photographs; the last ever taken by her partner.</p>
+		<p>Once I was certain all the data was intact, I picked up my own phone and called <i>F</i> to tell her the news. Soon after she came over to discover the coveted photographs; the last ever taken by her partner.</p>
 
-		<p>Reality is sometimes stranger than fiction as the day was Christmas day. This was a difficult yet beautiful moment. As far as I am concerned, it was as close to the true meaning of Christmas as one can get.</p>
+		<p>Reality is sometimes stranger than fiction as the day was Christmas Day. Her to discover these pictures was a difficult yet beautiful moment. As far as I am concerned, it was as close to the true meaning of Christmas as one can get.</p>
 
 		<hr>
 
@@ -145,17 +145,17 @@
 
 		<p>You might wonder if there was a legal avenue available to us in order to access the photos. While Google can not do anything regarding the full disk encryption of the phone (as far as I know), they do provide the ability to <a href="https://support.google.com/accounts/troubleshooter/6357590?hl=en">submit a request regarding a deceased user's account</a>, including requesting access to a deceased user's data. In the event the photos had successfully been uploaded to the cloud by the phone, this might have been a possibility.</p>
 
-		<p>However this did not look simpler by any means. This story happened in France and the Google procedure gets really complicated once you are not in the United States. Every document we had (death certificate, civil union certificate etc.) had to be accompanied by a <a href="https://abroads.eu/en/what-is-a-sworn-translation/">sworn translation</a> acceptable in the U.S. legal system. Even if Google accepted our request, we would still have needed an order from a judge from the United States for Google to act. Navigating your own country's legal system is difficult enough; navigating a foreign country's legal system from the other side of the Atlantic Ocean looked daunting.</p>
+		<p>However this did not look simpler by any means. This story happened in France and the Google procedure gets really complicated once you are not in the United States. Every document we had (death certificate, civil union certificate etc.) had to be accompanied by a <a href="https://abroads.eu/en/what-is-a-sworn-translation/">sworn translation</a> admissible in the U.S. legal system. Even if Google accepted our request, they would still require an order from a judge from the United States to act. Navigating your own country's legal system is difficult enough; navigating a foreign country's legal system from the other side of the Atlantic Ocean looked daunting.</p>
 		<p>Besides <i>F</i> already had so much urgent paperwork on her plate following the passing that we agreed not to add even more of it.</p>
 
-		<p>I think Google should consider simplifying this procedure for non-U.S. residents, for instance by working with local juridictions in every countries where it is a realistic proposition. As more Google users will pass away, these kind of situations will come up more and more often.</p>
+		<p>I think Google should consider simplifying this procedure for non-U.S. residents, for instance by working with local juridictions in every country where it is a realistic proposition. As more Google users will pass away, these kind of situations will come up more and more often.</p>
 
 		<h2>Appendix B: what should you do?</h2>
 
 		<p>If you are a heavy Google user please consider setting up your <a href="https://support.google.com/accounts/answer/3036546">Inactive Account Manager</a> and tell your relatives about it. This procedure allows you to automatically give people of your choosing access to your Google data once you have not used your account for a period of time.</p>
 
 		<p>You should also decide if this story is about the difficulty of accessing a passed relative's data, or about the many ways a motivated attacker can access your data against your will.</p>
-		<p>Consider using a phone and computer with robust full disk encryption, and consider using a password manager (you can still give the master password to a notary or similar for your relatives in the future).</p>
+		<p>If you're more concerned with the latter you should consider using a phone and computer with robust full disk encryption as well as a password manager (you can still give the master password to a notary or similar for your relatives in the future).</p>
 
 		<h2>Appendix C: the NTLM hash and the Google account</h2>
 
