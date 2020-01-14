@@ -6,8 +6,6 @@
 		<title>Mourning our loved ones, one password at a time</title>
 		<style type="text/css">
 			body{
-				text-align: justify;
-				text-justify: inter-word;
 				margin:40px auto;
 				max-width:750px;
 				line-height:1.6;
@@ -16,12 +14,15 @@
 				background-color: #EEEEEE;
 				padding:0 10px
 			}
+			p{
+				text-align: justify;
+                                text-justify: inter-word;
+			}
 			h1,h2,h3{
 				line-height:1.2
 			}
 			h1 {
 				text-align: center;
-				text-justify: none;
 			}
 		</style>
 	</head>
@@ -56,7 +57,7 @@
 
 		<ol>
 			<li><i>G</i>'s aforementioned Nexus 5X contained the coveted pictures but was protected by a numerical passcode of unknown length, with a limited number of attempts left. Since the passing, the phone shut down at least once when its battery ran out.</li>
-			<li><i>G</i>'s Google Account. It was plausible (but not certain) that the photos could have been successfully uploaded to the cloud before the phone shut down. Also, getting access to this account would allow us to properly close all other accounts of <i>G</i> on various services as this Google account was the epicenter of his digital life.</li>
+			<li><i>G</i>'s Google Account. It was plausible (but not certain) that the photos had been successfully uploaded to the cloud before the phone shut down. Also, getting access to this account would allow us to properly close all other accounts of <i>G</i> on various services as this Google account was the epicenter of his digital life.</li>
 			<li><i>G</i>'s session on his Windows 7 personal computer was protected by an unknown password. <i>F</i> also had an unprotected session on the same computer she used once in a while.</li>
 		</ol>
 
@@ -64,7 +65,7 @@
 
 		<h2>Attempt 1: attacking the sessions</h2>
 
-		<p>Bypassing the Windows password proved easy. As <i>F</i> told me she could sign into her session from boot without any password, I deduced the computer had no full disk encryption scheme set up. I booted using a Debian live CD, accessed <i>G</i>'s files, copied his Chrome and Firefox profiles somewhere they could be read publicly, booted back into Windows, and started Chrome and Firefox from <i>F</i>'s session using <i>G</i>'s profiles. All of <i>G</i>'s tabs, bookmarks and browser history appeared before us, but unfortunately most of the sessions had been invalidated. As four months had passed since the death, they most likely expired but I still wonder if I could have triggered some <a href="https://en.wikipedia.org/wiki/Device_fingerprint">browser fingerprinting</a> detection mechanism on Google's side by mixing browser profiles from different Windows sessions (fingerprinting detection is also the reason I did not load the browser profiles directly from my Debian live CD).</p>
+		<p>Bypassing the Windows password proved easy. As <i>F</i> told me she could sign into her session from boot without any password, I deduced the computer had no full disk encryption scheme set up. I booted using a Linux live CD, accessed <i>G</i>'s files, copied his Chrome and Firefox profiles somewhere they could be read publicly, booted back into Windows, and started Chrome and Firefox from <i>F</i>'s session using <i>G</i>'s profiles. All of <i>G</i>'s tabs, bookmarks and browser history appeared before us, but unfortunately most of the sessions had been invalidated. As four months had passed since the death, they most likely expired but I still wonder if I could have triggered some <a href="https://en.wikipedia.org/wiki/Device_fingerprint">browser fingerprinting</a> detection mechanism on Google's side by mixing browser profiles from different Windows sessions (fingerprinting detection is also the reason I did not load the browser profiles directly from my Linux live CD).</p>
 
 		<p>Later I realized that I could have made sure to have zero fingerprinting issues by using a tool such as <a href="http://manpages.ubuntu.com/manpages/trusty/man8/chntpw.8.html">chntpw</a> to erase <i>G</i>'s Windows session password then log directly to his (now password-free) session. Alas, I had not done that: the sessions were now invalidated either by expiration or by my fault.</p>
 
@@ -74,31 +75,31 @@
 
 		<p>I keep telling people that high-end Android phones and all iPhones since the 5S are basically fortresses (as long as they are kept up to date). This was now the time to check if this assumption hold true in practice. I began gathering material about any public vulnerability affecting Android or the Nexus 5X that could help me breaking the phone encryption.</p>
 
-		<p>One of the most promising vulnerabilities I encountered was IBM's <a href="https://exchange.xforce.ibmcloud.com/collection/Google-Nexus-5X-Bootloader-Unauthorized-Memory-Dumping-via-USB-334310227a1065ee7585b37e4d3be0a3">XFID-116494</a>: on a Nexus 5X with vulnerable firmware it is possible to trigger a memory dump over USB by crashing the phone using the ADB interface. This memory dump happened to contains the passcode but unfortunately, Google issued a firmware update for this problem even before IBM's disclosure. I did try to reproduce it on <i>G</i>'s phone, to no avail: the phone had an up-to-date firmware.</p>
+		<p>One of the most promising vulnerabilities I encountered was IBM's <a href="https://exchange.xforce.ibmcloud.com/collection/Google-Nexus-5X-Bootloader-Unauthorized-Memory-Dumping-via-USB-334310227a1065ee7585b37e4d3be0a3">XFID-116494</a>: on a Nexus 5X with vulnerable firmware it is possible to trigger a memory dump over USB by crashing the phone using the ADB interface. This memory dump happened to contains the passcode but unfortunately, Google issued a firmware update for this problem even before IBM's disclosure. I tried to reproduce it on <i>G</i>'s phone, to no avail: the phone had an up-to-date firmware.</p>
 
 		<p>After that I splitted the problem in two: getting access to the encrypted data, and decrypting the data.</p>
 
 		<p>Simply exfiltrating the encrypted data &mdash; without even decrypting it &mdash; from the locked phone proved daunting. The Nexus 5X does not have any removable storage where the pictures might have resided (encrypted or not). I did not find any publicly known way to trigger a data exfiltration from software while the phone was still locked.</p>
-		<p>I began considering the possibility of doing it in hardware: looking at the <a href="https://www.ifixit.com/Teardown/Nexus+5X+Teardown/51318">iFixit teardown of the Nexus 5X</a> I learned that the storage of the Nexus 5X is built on a <a href="http://toshiba.semicon-storage.com/info/docget.jsp?did=12587">Toshiba chip</a>. Could it be possible to unsolder this chip and read the data back? Amir Etemadieh, CJ Heres, Khoa Hoang did a presentation about <a href="https://www.blackhat.com/docs/us-17/wednesday/us-17-Etemadieh-Hacking-Hardware-With-A-$10-SD-Card-Reader-wp.pdf">reading storage chips from various Android phones</a> at Black Hat 2017. Unfortunately, to the best of my knowledge nobody has documented a public attempt at doing the same for a Nexus 5X and I would be way out of my depth trying to do it alone.</p>
+		<p>I contemplated the possibility of doing it in hardware: looking at the <a href="https://www.ifixit.com/Teardown/Nexus+5X+Teardown/51318">iFixit teardown of the Nexus 5X</a> I learned that the storage of the Nexus 5X is built on a <a href="http://toshiba.semicon-storage.com/info/docget.jsp?did=12587">Toshiba chip</a>. Could it be possible to unsolder this chip and read the data back? It seems so: Amir Etemadieh, CJ Heres, Khoa Hoang did exactly that on various Android phones and talked about it <a href="https://www.blackhat.com/docs/us-17/wednesday/us-17-Etemadieh-Hacking-Hardware-With-A-$10-SD-Card-Reader-wp.pdf">at Black Hat 2017</a>. Unfortunately, to the best of my knowledge nobody has documented a public attempt at doing the same for a Nexus 5X and I would be way out of my depth trying to do it alone.</p>
 
-		<p>Even if I did have access to the encrypted data, would I find an attack to break its encryption? In 2016 Gal Beniamini showed that <a href="http://bits-please.blogspot.com/2016/06/extracting-qualcomms-keymaster-keys.html">50% of Android phones were vulnerable to out-of-phone decryption</a> because of a hardware design flaw in Qualcomm's KeyMaster module: on vulnerable designs, it was possible to exfiltrate the master hardware seed used in conjonction with the passcode to generate the decryption key, leaving only the passcode itself to be brute-forced. At billions of attempts per second, any numerical passcode would get cracked in minutes or even seconds. Unfortunately, the Nexus 5X was not a vulnerable design.</p>
+		<p>Even if I did have access to the encrypted data, would I find an attack to break its encryption? In 2016 Gal Beniamini showed that <a href="http://bits-please.blogspot.com/2016/06/extracting-qualcomms-keymaster-keys.html">50% of Android phones were vulnerable to out-of-phone decryption</a> because of a hardware design flaw in Qualcomm's KeyMaster module: on vulnerable designs, it was possible to exfiltrate the master hardware seed used in conjonction with the passcode to generate the decryption key, leaving only the passcode itself to be brute-forced. At billions of attempts per second, any numerical passcode would get cracked in minutes if not seconds. Unfortunately, the Nexus 5X was not a vulnerable design.</p>
 
-		<p>As I winded down my efforts on the phone itself, I realized how uneven Android security is. Most low or mid-range phones can be broken into fairly easily, while breaking into an up-to-date high-end model will most likely require the use of one or several pricey zero-day vulnerabilities. Choose your Android phone wisely (or use an iPhone).</p>
+		<p>As I winded down my efforts on the phone itself, I realized how uneven Android security is. Most low or mid-range phones can be broken into fairly easily, while successfully attacking an up-to-date high-end model will most likely require the use of one or several pricey zero-day vulnerabilities. Choose your Android phone wisely (or use an iPhone).</p>
 
 		<h2>Attempt 3: attacking the passwords</h2>
 
-		<p>I realized I had made a mistake in my mental model of the situation: I had reasoned as if <i>G</i> had a perfect password hygiene all the time. While it is theoretically possible to only use strong, unique passwords &mdash; and you can get very close to that by using a password manager &mdash; this is not how most people use passwords. Usually they'll rotate between a bunch of passwords, strong or not, and at most they will add a prefix or suffix to a common root to make them &lsquo;unique&rsquo; (a tactic that might be effective at repelling basic automated attacks but not dedicated attackers like I was now).</p>
+		<p>I realized I had made a mistake in my mental model of the situation: so far I had reasoned as if <i>G</i> had a perfect password hygiene all the time. While it is theoretically possible to only use strong, unique passwords &mdash; and you can get very close to that by using a password manager &mdash; this is not how most people use passwords. Usually they'll rotate between a bunch of passwords, strong or not, and at most they will add a prefix or suffix to a common root to make them &lsquo;unique&rsquo; (a tactic that might be effective at repelling basic automated attacks but not dedicated attackers like I was now).</p>
 
-		<p>While he was alive <i>G</i> never striked me as someone paranoid about security and I never heard him talking about a password manager. The password hint for his Windows session was literally &ldquo;as usual&rdquo; which strongly suggested a pattern of password reuse.</p>
+		<p>When he was alive <i>G</i> never striked me as someone paranoid about security and I never heard him talking about a password manager. The password hint for his Windows session was literally &ldquo;as usual&rdquo; which strongly suggested a pattern of password reuse.</p>
 
 		<p>The new plan was:</p>
 		<ol>
-			<li>Gather as many passwords of him as possible from as many sources as possible.</li>
+			<li>Gather as many passwords of his as possible from as many sources as possible.</li>
 			<li>Study them and understand how he chose them.</li>
 			<li>Make an educated guess about his Google account password.</li>
 			<li>Hope to be lucky about a few things:
 				<ul>
-					<li>Either that he did not have a two-factor authentication on his Google account (the second factor being his phone which we did not have access to either)</li>
+					<li>Either that he did not have a two-factor authentication on his Google account (as it was most probably his phone which we did not have access to either)</li>
 					<li>Or if he had, that his Windows session was still considered a trusted device.</li>
 					<li>And that the photos had actually been uploaded there.</li>
 				</ul>
@@ -111,14 +112,14 @@
 			<li>
 			<a href="https://haveibeenpwned.com/">Have I Been Pwned</a> informed me that <i>G</i>'s email address was found in no less than 15 security breaches. That meant that passwords of him &mdash; or at least their hashes &mdash; were out there. I started looking for the original data for these breaches, starting with the most gigantic of them all: <a href="https://www.troyhunt.com/the-773-million-record-collection-1-data-reach/">Collection #1</a>.
 			773 millions unique email addresses, 1.16 <i>billions</i> unique combinations of email addresses and passwords, 80 gigabytes of data, Collection #1 is <i>big</i>.
-			<br>Still the original dataset is dreadfully easy to find and poking inside I found a dozen entries for <i>G</i> email address, all of them with the same brute-forced password: a weak password made of four letters followed by four numbers. However I also found that Collection #1 did contain some errors (on my own email address I found two old but legitimate passwords of mine but also two passwords I had never used). While there was a strong possibility that this was a password used by <i>G</i> I had no proof of that yet.
+			<br>Still the original dataset is dreadfully easy to find and poking inside I found a dozen entries for <i>G</i> email address, all of them with the same brute-forced password: a weak password made of four letters followed by four numbers. However I also found that Collection #1 contained some errors (associated with my email address were two old but legitimate passwords of mine but also two passwords I had never used). While there was a strong possibility that this was a password used by <i>G</i> I had no proof of that yet.
 			</li>
 			<li>
 				Suddenly I was very happy to not have erased <i>G</i>'s Windows session password using chntpw. I tried entering the Collection #1 password in the Windows session login and it did not work. That meant that <i>G</i> used at least one password I was not aware of, and I still had work to do before being confident enough to proceed with an attempt at guessing the Google password.
-				<br>Once again booting on Linux live OS, I used <a href="https://linux.die.net/man/1/samdump2">samdump2</a> to extract the hash of <i>G</i>'s Windows session password from his computer. Most versions of Windows store password hashes using a scheme called <a href="https://en.wikipedia.org/wiki/NT_LAN_Manager">NTLM</a> that can be brute-forced quite efficiently: even my five-year-old GPU could attempt 2 to 3 billions guesses per second using <a href="https://hashcat.net/hashcat/">Hashcat</a> in NTLM mode. 
+				<br>Once again booting on a Linux live OS, I used <a href="https://linux.die.net/man/1/samdump2">samdump2</a> to extract the hash of <i>G</i>'s Windows session password from his computer. Most versions of Windows store password hashes through a scheme called <a href="https://en.wikipedia.org/wiki/NT_LAN_Manager">NTLM</a> that can be brute-forced quite efficiently: even my five-year-old GPU could attempt 2 to 3 billions guesses per second using <a href="https://hashcat.net/hashcat/">Hashcat</a> in NTLM mode. 
 
-			Moreover, as a GPU programmer <i>G</i> had a decent GPU on his home machine and <i>F</i> had no problems with letting the PC working a few weeks non-stop if necessary. 
-			<br>Still, brute-forcing a (probably) strong password would not be accomplished through a pure brute-force effort and I gathered (and devised myself) multiple common passwords patterns that I would try against the NTLM hash of <i>G</i>'s Windows password. 
+				Moreover, as a GPU programmer <i>G</i> had a decent GPU on his home machine and <i>F</i> had no problems with letting the PC working a few weeks non-stop if necessary. I was using <i>G</i>'s own hardware against his own password.
+			<br>Still, cracking a (potentially) strong password would not be accomplished through a pure brute-force effort and I gathered (and devised myself) multiple common passwords patterns that I would try against the NTLM hash. 
 			</li>
 		</ul>
 
