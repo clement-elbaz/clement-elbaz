@@ -6,8 +6,10 @@
 		<title>Mourning our loved ones, one password at a time</title>
 		<style type="text/css">
 			body{
+				text-align: justify;
+				text-justify: inter-word;
 				margin:40px auto;
-				max-width:800px;
+				max-width:750px;
 				line-height:1.6;
 				font-size:18px;
 				color:#444;
@@ -17,10 +19,14 @@
 			h1,h2,h3{
 				line-height:1.2
 			}
+			h1 {
+				text-align: center;
+				text-justify: none;
+			}
 		</style>
 	</head>
 	<body>
-		<h1>Mourning our loved ones, one password at a time</h1>
+		<h1>Mourning our loved ones <br>One password at a time</h1>
 
 		<p><i>January 2020</i></p>
 
@@ -42,7 +48,7 @@
 
 		<p>I decided to be both a good friend and earn my title of security engineer, and in November &mdash; with <i>F</i> blessing &mdash; I launched a full-scale offensive security operation to gain access to these photographs any way I could.</p>
 
-		<p>This is the story of everything I tried, and how I succeeded.</p>
+		<p>This is the story of everything I tried, and how I succeeded.</p>	
 
 		<h2>Reconnaissance</h2>
 
@@ -118,7 +124,7 @@
 
 		<p>In the middle of all that, I thought again of the Collection #1 password. More specifically its pattern: four letters and four numbers.</p>
 
-		<p>Four numbers. I then remembered the phone and its numerical passcode of unknown length. While the Nexus 5X had only 6 remaining attempts and this was a long shot, I tried entering the four numbers of the Collection #1 password as a passcode for the phone. And then&hellip; <strong>it worked</strong>.</p>
+		<p>Four numbers. I then remembered the Nexus 5X and its numerical passcode of unknown length. While phone only had 6 remaining attempts and this was a long shot, I tried entering the four numbers of the Collection #1 password as a passcode for the phone. And&hellip; <strong>it worked</strong>.</p>
 
 		<p>The phone was now unlocked, and all the data was there. The timestamp of the last photo was less than 8 hours before the passing.</p>
 
@@ -132,6 +138,8 @@
 
 		<p>Reality is sometimes stranger than fiction as the day was Christmas day. This was a difficult yet beautiful moment. As far as I am concerned, it was as close to the true meaning of Christmas as one can get.</p>
 
+		<hr>
+
 		<h2>Appendix A: the legal way?</h2>
 
 		<p>You might wonder if there was a legal avenue available to us in order to access the photos. While Google can not do anything regarding the full disk encryption of the phone (as far as I know), they do provide the ability to <a href="https://support.google.com/accounts/troubleshooter/6357590?hl=en">submit a request regarding a deceased user's account</a>, including requesting access to a deceased user's data. In the event the photos had successfully been uploaded to the cloud by the phone, this might have been a possibility.</p>
@@ -144,6 +152,9 @@
 		<h2>Appendix B: what should you do?</h2>
 
 		<p>If you are a heavy Google user please consider setting up your <a href="https://support.google.com/accounts/answer/3036546">Inactive Account Manager</a> and tell your relatives about it. This procedure allows you to automatically give people of your choosing access to your Google data once you have not used your account for a period of time.</p>
+
+		<p>You should also decide if this story is about the difficulty of accessing a passed relative's data, or about the many ways a motivated attacker can access your data against your will.</p>
+		<p>Consider using a phone and computer with robust full disk encryption, and consider using a password manager (you can still give the master password to a notary or similar for your relatives in the future).</p>
 
 		<h2>Appendix C: the NTLM hash and the Google account</h2>
 
