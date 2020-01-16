@@ -31,19 +31,19 @@
 
 		<p><i>January 2020</i></p>
 
-		<p>This is a story about love, death, and friendship. It is also one of the most interesting infosec stories I've been involved in.</p>
+		<p>This is a story about love, death, and friendship. It is also one of the most interesting infosec stories I have been involved in.</p>
 
 		<p>It starts with a tragedy. Last August one of my best friends suddenly lost her life partner from a heart attack. He was 37. They had been sharing each other's lives for more than a decade.</p>
 
-		<p>Before going further I would like to pay homage to both of them. They're wonderful and inspiring people that I feel very lucky to have met.</p>
+		<p>Before going further I would like to pay homage to both of them. They're wonderful and inspiring people that I feel very lucky for our paths to have crossed.</p>
 
-		<p>Let us call her <i>F</i> and let us call him <i>G</i>.
+		<p>Let us call her <i>F</i> and him <i>G</i>.
 
-		<p>Anyone who faced the loss of a loved one knows how grueling and difficult the first months are. <i>F</i>'s friends and I did (and still do) our best to assist her any way we can in this ordeal. A few months in, <i>F</i> reached out with a question: the passing had happened while they were on vacation and <i>G</i> had taken many pictures on his smartphone during their last days together. She wanted to take a look at these photos but realized she could not.</p>
+		<p>Anyone who faced the loss of a loved one knows how grueling and difficult the first months are. <i>F</i>'s friends and I did (and still do) our best to assist her any way we can in this ordeal. A few months in, <i>F</i> reached out with a question: the passing had happened while they were on vacation and <i>G</i> had taken many pictures with his smartphone during their last days together. She wanted to take a look at these photos but realized she could not.</p>
 
-		<p>She had neither the phone passcode &mdash; <i>G</i> mostly used his fingerprints to unlock his phone &mdash; nor access to <i>G</i>'s Google account where they might have been automatically uploaded.</p>
+		<p>She had neither the phone passcode &mdash; <i>G</i> mostly used his fingerprints to unlock his phone &mdash; nor access to <i>G</i>'s Google account where they might have been uploaded automatically.</p>
 
-		<p>A couple of us software engineer friends looked into it and quickly realized this would prove difficult: the phone was a Nexus 5X, the first Android model with full disk encryption enabled by default, in a similar fashion to the iPhone. Moreover, the phone was set to erase all of its data after too many wrong codes, and only 8 or 9 attempts were remaining. We handed back the phone and told her we could not help her on that one.</p>
+		<p>A couple of us software engineer friends looked into it and quickly realized this would prove difficult: the phone was a Nexus 5X, the first Android model with full disk encryption enabled by default, in a similar fashion to the iPhone. Moreover, the phone was set to erase all of its data after too many tries, and less than 10 attempts were remaining. We handed back the phone and told her we could not help her on that one.</p>
 
 		<p>But these photographs kept nagging me. While I do work in defensive computer security my work is quite theoretical and I had not dabbled in offensive security since my teenager days. But was I really going to let a friend down after a cursory look at an encrypted phone?</p>
 
@@ -53,7 +53,7 @@
 
 		<h2>Reconnaissance</h2>
 
-		<p><i>F</i> and I took a tour of <i>G</i>'s digital life. <i>G</i> was a GPU programmer &mdash; and a good one at that &mdash;, a detail that will matter later in this story. That meant that I could expect him to be tech-savvy though not necessarily focused on security. We identified three things we did not have immediate access to:</p>
+		<p><i>F</i> and I took a tour of <i>G</i>'s digital life. <i>G</i> was a software engineer: that meant that I could expect him to be tech-savvy though not necessarily focused on security. We identified three things we did not have immediate access to:</p>
 
 		<ol>
 			<li><i>G</i>'s aforementioned Nexus 5X contained the coveted pictures but was protected by a numerical passcode of unknown length, with a limited number of attempts left. Since the passing, the phone shut down at least once when its battery ran out.</li>
@@ -67,7 +67,7 @@
 
 		<p>Bypassing the Windows password proved easy. As <i>F</i> told me she could sign into her session from boot without any password, I deduced the computer had no full disk encryption scheme set up. I booted using a Linux live CD, accessed <i>G</i>'s files, copied his Chrome and Firefox profiles somewhere they could be read publicly, booted back into Windows, and started Chrome and Firefox from <i>F</i>'s session using <i>G</i>'s profiles. All of <i>G</i>'s tabs, bookmarks and browser history appeared before us, but unfortunately most of the sessions had been invalidated. As four months had passed since the death, they most likely expired but I still wonder if I could have triggered some <a href="https://en.wikipedia.org/wiki/Device_fingerprint">device fingerprinting</a> detection mechanism on Google's side by mixing browser profiles from different Windows sessions (fingerprinting detection is also the reason I did not load the browser profiles directly from my Linux live CD).</p>
 
-		<p>Later I realized that I could have made sure to have zero fingerprinting issues by using a tool such as <a href="http://manpages.ubuntu.com/manpages/trusty/man8/chntpw.8.html">chntpw</a> to erase <i>G</i>'s Windows session password then log directly to his (now password-free) session. Alas, I had not done that: the sessions were now invalidated either by expiration or by my fault.</p>
+		<p>Later I realized I could have made sure to have zero fingerprinting issues by using a tool such as <a href="http://manpages.ubuntu.com/manpages/trusty/man8/chntpw.8.html">chntpw</a> to erase <i>G</i>'s Windows session password then log directly to his (now password-free) session. Alas, I had not done that: the sessions were now invalidated either by expiration or by my fault.</p>
 
 		<h2>Attempt 2: attacking the phone's full disk encryption</h2>
 
@@ -82,15 +82,15 @@
 		<p>Simply exfiltrating the encrypted data &mdash; without even decrypting it &mdash; from the locked phone proved daunting. The Nexus 5X does not have any removable storage where the pictures might have resided (encrypted or not). I did not find any publicly known way to trigger a data exfiltration from software while the phone was still locked.</p>
 		<p>I contemplated the possibility of doing it in hardware: reading the <a href="https://www.ifixit.com/Teardown/Nexus+5X+Teardown/51318">iFixit teardown of the Nexus 5X</a> I learned the storage of the Nexus 5X is built on a Toshiba chip whose <a href="http://toshiba.semicon-storage.com/info/docget.jsp?did=12587">specification</a> is available. Could it be possible to unsolder this chip and read the data back? It seems so: Amir Etemadieh, CJ Heres, Khoa Hoang did something close on various Android phones then talked about it <a href="https://www.blackhat.com/docs/us-17/wednesday/us-17-Etemadieh-Hacking-Hardware-With-A-$10-SD-Card-Reader-wp.pdf">during Black Hat 2017</a>. Unfortunately, to the best of my knowledge nobody has documented a public attempt at doing the same for a Nexus 5X and I was way out of my depth trying to do it alone.</p>
 
-		<p>Even if I did have access to the encrypted data, would I find an attack to break its encryption? In 2016 Gal Beniamini showed that <a href="http://bits-please.blogspot.com/2016/06/extracting-qualcomms-keymaster-keys.html">50% of Android phones were vulnerable to out-of-phone decryption</a> because of a hardware design flaw in Qualcomm's KeyMaster module: on vulnerable designs, it was possible to exfiltrate the master hardware seed used in conjunction with the passcode to generate the decryption key, leaving only the passcode itself to be brute-forced. At billions of attempts per second, any numerical passcode would get cracked in minutes if not seconds. Unfortunately, the Nexus 5X was not a vulnerable design.</p>
+		<p>Even if I did have access to the encrypted data, would I find an attack to break its encryption? In 2016 Gal Beniamini showed that <a href="http://bits-please.blogspot.com/2016/06/extracting-qualcomms-keymaster-keys.html">50% of Android phones were vulnerable to out-of-phone decryption</a> because of a hardware design flaw in Qualcomm's KeyMaster module: on vulnerable designs, it was possible to exfiltrate the master seed used in conjunction with the passcode to generate the decryption key, leaving only the passcode itself to be brute-forced. At billions of attempts per second, any numerical passcode would get cracked in minutes if not seconds. Unfortunately, the Nexus 5X was not a vulnerable design.</p>
 
 		<p>As I winded down my efforts on the phone itself, I realized how uneven Android security is. Most low or mid-range phones can be broken into fairly easily, while successfully attacking an up-to-date high-end model will most likely require the use of one or several pricey zero-day vulnerabilities. Choose your Android phone wisely (or use an iPhone).</p>
 
 		<h2>Attempt 3: attacking the passwords</h2>
 
-		<p>I realized I had made a mistake in my mental model of the situation: so far I had reasoned as if <i>G</i> had a perfect password hygiene all the time. While it is theoretically possible to only use strong, unique passwords &mdash; and you can get very close to that by using a password manager &mdash; this is not how most people use passwords. Usually they'll rotate between a bunch of passwords, strong or not, and at most they will add a prefix or suffix to a common root to make them &lsquo;unique&rsquo; (a tactic that might be effective at repelling basic automated attacks but not dedicated attackers like I was now).</p>
+		<p>I realized I had made a mistake in my mental model of the situation: so far I had reasoned as if <i>G</i> had a perfect password hygiene all the time. While it is theoretically possible to only use strong, unique passwords &mdash; and you can get very close to that by using a password manager &mdash; this is not how most people use passwords. Usually they will rotate between a limited number of passwords, strong or not, and at most they will add a prefix or suffix to create &lsquo;unique&rsquo; passwords for each service (a tactic that might be effective at repelling basic automated attacks but not dedicated attackers like I was now).</p>
 
-		<p>When he was alive <i>G</i> never struck me as someone paranoid about security and I never heard him talking about using a password manager. The password hint for his Windows session was literally &ldquo;as usual&rdquo; which strongly suggested a pattern of password reuse.</p>
+		<p>When he was alive <i>G</i> never struck me as someone paranoid about security and I never heard him talk about using a password manager. The password hint for his Windows session was literally &ldquo;as usual&rdquo; which strongly suggested a pattern of password reuse.</p>
 
 		<p>The new plan was:</p>
 		<ol>
@@ -117,15 +117,13 @@
 			<li>
 				Suddenly I was very happy to not have erased <i>G</i>'s Windows session password using chntpw. I tried entering the Collection #1 password in the Windows session login and it did not work. That meant that <i>G</i> used at least one password I was not aware of, and I still had work to do before being confident enough to proceed with an attempt at guessing the Google password.
 				<br>Once again booting on a Linux live OS, I used <a href="https://linux.die.net/man/1/samdump2">samdump2</a> to extract the hash of <i>G</i>'s Windows session password from his computer. Most versions of Windows store password hashes through a scheme called <a href="https://en.wikipedia.org/wiki/NT_LAN_Manager">NTLM</a> that can be brute-forced quite efficiently: even my five-year-old GPU could attempt 2 to 3 billions guesses per second using <a href="https://hashcat.net/hashcat/">Hashcat</a> in NTLM mode. 
-
-				Moreover, as a GPU programmer <i>G</i> had a decent GPU on his home machine and <i>F</i> had no problems letting the PC work a few weeks non-stop. I was using <i>G</i>'s own hardware to crack his own password.
 				<br>Still, cracking a (potentially) strong password would not be accomplished through a pure brute-force effort and I started thinking about the most likely password patterns <i>G</i> could have used. 
 			</li>
 		</ul>
 
 		<p>In the middle of all that, I thought again of the Collection #1 password. More specifically its pattern: four letters and four numbers.</p>
 
-		<p>Four numbers. I then remembered the Nexus 5X and its numerical passcode of unknown length. While the phone only had 6 remaining attempts and this was a long shot, I tried entering the four numbers of the Collection #1 password as the passcode for the phone. And&hellip; <strong>it worked</strong>.</p>
+		<p>Four numbers. I then remembered the Nexus 5X and its numerical passcode of unknown length. The phone only had 6 remaining attempts and it was a long shot, but I tried entering the four numbers of the Collection #1 password as the passcode for the phone. And&hellip; <strong>it worked</strong>.</p>
 
 		<p>The phone was now unlocked, and all the data was there. The timestamp of the last photo was less than 8 hours before the passing.</p>
 
@@ -155,7 +153,7 @@
 		<p>If you are a heavy Google user please consider setting up your <a href="https://support.google.com/accounts/answer/3036546">Inactive Account Manager</a> and tell your relatives about it. This procedure allows you to automatically give people of your choosing access to your Google data once you have not used your account for a period of time.</p>
 
 		<p>You should also decide if this story is about the difficulty of accessing a passed relative's data, or about the many ways a motivated attacker can access your data against your will.</p>
-		<p>If you're more concerned with the latter you should consider using a phone and computer with robust full disk encryption as well as a password manager (you can still give the master password to a notary or similar for your relatives in the future).</p>
+		<p>If you are more concerned with the latter you should consider using a phone and computer with robust full disk encryption as well as a password manager (you can still give the master password to a notary or similar for your relatives in the future).</p>
 
 		<h2>Appendix C: the NTLM hash and the Google account</h2>
 
