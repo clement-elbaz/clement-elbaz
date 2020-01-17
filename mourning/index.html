@@ -167,19 +167,6 @@
 
 		<p>How could I gather <i>G</i>'s passwords? I started two endeavors simultaneously:</p>
 
-		<ul>
-			<li>
-			Using <a href="https://haveibeenpwned.com/">Have I Been Pwned</a> I learned that <i>G</i>'s email address was found in no less than 15 security breaches. That meant that passwords of his &mdash; or at least their cryptographic hashes &mdash; were out there. I started looking for the original data for these breaches, starting with the most gigantic of them all: <a href="https://www.troyhunt.com/the-773-million-record-collection-1-data-reach/">Collection #1</a>.
-			773 millions unique email addresses, 1.16 billions unique combinations of email addresses and passwords, 80 gigabytes of data, Collection #1 is <i>big</i>.
-			<br>The original dataset is dreadfully easy to find and while poking inside I found a dozen entries for <i>G</i> email address, all of them with the same cracked password: a weak password made of four letters followed by four numbers. However I also found that Collection #1 contained some errors (my own email address was associated with two real passwords of mine but also two passwords I had never used). There was a strong possibility this was an actual password of <i>G</i> but I had no proof yet.
-			</li>
-			<li>
-				Suddenly I was very happy to not have erased <i>G</i>'s Windows session password using chntpw. I tried entering the Collection #1 password in the Windows session login and it did not work. That meant that <i>G</i> used at least one password I was not aware of, and I still had work to do before being confident enough to proceed with an attempt at guessing the Google password.
-				<br>Once again booting on a Linux live OS, I used <a href="https://linux.die.net/man/1/samdump2">samdump2</a> to extract the hash of <i>G</i>'s Windows session password from his computer. Most versions of Windows store password hashes through a scheme called <a href="https://en.wikipedia.org/wiki/NT_LAN_Manager">NTLM</a> that can be brute-forced quite efficiently: even my five-year-old GPU could attempt 2 to 3 billions guesses per second using <a href="https://hashcat.net/hashcat/">Hashcat</a> in NTLM mode. 
-				<br>Still, cracking a (potentially) strong password would not be accomplished through a pure brute-force effort and I started thinking about the most likely password patterns <i>G</i> could have used. 
-			</li>
-		</ul>
-
 		<div>
                         <div style="border:solid; border-radius: 50% 50%; margin:auto; width:65%; background-color:aliceblue">
                                 <p style="text-align:center;"><strong>Remote access</strong></p>
@@ -207,7 +194,20 @@
 					<p style="border-top:solid; font-size: 0.85em; text-align:center; margin-bottom: 0; padding-top:5%; padding-bottom:5%; background-color:#D0FFD0; border-radius: 0 0 30px 30px">One weak password of format abcd1234</p>
                                 </div>
                         </div>
-                </div>
+		</div>
+
+		<ul>
+			<li>
+			Using <a href="https://haveibeenpwned.com/">Have I Been Pwned</a> I learned that <i>G</i>'s email address was found in no less than 15 security breaches. That meant that passwords of his &mdash; or at least their cryptographic hashes &mdash; were out there. I started looking for the original data for these breaches, starting with the most gigantic of them all: <a href="https://www.troyhunt.com/the-773-million-record-collection-1-data-reach/">Collection #1</a>.
+			773 millions unique email addresses, 1.16 billions unique combinations of email addresses and passwords, 80 gigabytes of data, Collection #1 is <i>big</i>.
+			<br>The original dataset is dreadfully easy to find and while poking inside I found a dozen entries for <i>G</i> email address, all of them with the same cracked password: a weak password made of four letters followed by four numbers. However I also found that Collection #1 contained some errors (my own email address was associated with two real passwords of mine but also two passwords I had never used). There was a strong possibility this was an actual password of <i>G</i> but I had no proof yet.
+			</li>
+			<li>
+				Suddenly I was very happy to not have erased <i>G</i>'s Windows session password using chntpw. I tried entering the Collection #1 password in the Windows session login and it did not work. That meant that <i>G</i> used at least one password I was not aware of, and I still had work to do before being confident enough to proceed with an attempt at guessing the Google password.
+				<br>Once again booting on a Linux live OS, I used <a href="https://linux.die.net/man/1/samdump2">samdump2</a> to extract the hash of <i>G</i>'s Windows session password from his computer. Most versions of Windows store password hashes through a scheme called <a href="https://en.wikipedia.org/wiki/NT_LAN_Manager">NTLM</a> that can be brute-forced quite efficiently: even my five-year-old GPU could attempt 2 to 3 billions guesses per second using <a href="https://hashcat.net/hashcat/">Hashcat</a> in NTLM mode.
+				<br>Still, cracking a (potentially) strong password would not be accomplished through a pure brute-force effort and I started thinking about the most likely password patterns <i>G</i> could have used.
+			</li>
+		</ul>
 
 		<p>In the middle of all that, I thought again of the Collection #1 password. More specifically its pattern: four letters and four numbers.</p>
 
