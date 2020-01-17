@@ -105,6 +105,31 @@
 
 		<h2>Attempt 2: attacking the phone's full disk encryption</h2>
 
+		<div>
+                        <div style="border:solid; border-radius: 50% 50%; margin:auto; width:65%; background-color:aliceblue">
+                                <p style="text-align:center;"><strong>Remote access</strong></p>
+                                <div style="border:solid; margin:auto; width:50%; margin-bottom:3%; border-radius:30px; background-color:lavender">
+                                        <p style="text-align:center"><strong>Google Account</strong></p>
+                                        <p style="border-top:solid; font-size: 0.85em; text-align:center; margin-bottom:0; padding-top:5%; padding-bottom:5%; background-color:lavenderblush">Photos in cloud data?</p>
+                                        <p style="border-top:solid; font-size: 0.7em; text-align:center; margin-top:0; margin-bottom:0; background-color: lightcoral; border-radius: 0 0 27px 27px"><strong>Password unknown<br>Phone as second factor?</strong></p>
+
+                                </div>
+                        </div>
+                        <div style="border:solid; border-radius: 50% 50%; margin:auto; margin-top:1%; width: 95%; text-align:center; background-color:aliceblue">
+                                <p style="text-align:center;"><strong>Physical access</strong></p>
+                                <div style="border:solid; display:inline-block; width:40%; margin-bottom:8%; border-radius:30px; background-color:lavender">
+                                        <p style="text-align:center;"><strong>Nexus 5X</strong></p>
+					<p style="border-top:solid; font-size: 0.85em; text-align:center; margin-bottom:0; padding-top:5%; padding-bottom:5%; background-color:#D0FFD0">Contains the photos<br>Fully encrypted storage<br>Weakened by public vulnerabilities?</p>
+                                        <p style="border-top:solid; font-size: 0.7em; text-align:center; margin-top:0; margin-bottom:0; background-color: lightcoral; border-radius: 0 0 30px 30px"><strong>Passcode unknown</strong></p>
+                                </div>
+                                <div style="border:solid; display:inline-block; width:40%; margin-bottom:8%; border-radius:30px; background-color:lavender">
+                                        <p style="text-align:center;"><strong>Windows 7 PC</strong></p>
+                                        <p style="border-top:solid; font-size: 0.85em; text-align:center; margin-bottom: 0; padding-top:5%; padding-bottom:5%; background-color:lavenderblush;">Unencrypted hard drive<br>No active session</p>
+                                        <p style="border-top:solid; font-size: 0.7em; text-align:center; margin-top:0; margin-bottom:0; background-color: lightcoral; border-radius: 0 0 30px 30px"><strong>Password unknown</strong></p>
+                                </div>
+                        </div>
+                </div>
+
 		<p>I then picked another target: the locked phone. The GUI did not specify a length for the numerical passcode. I first tried a few of &lsquo;obvious&rsquo; codes, just in case. The number of remaining attempts was now down to 6 before data erasure. I did not insist.</p>
 
 		<p>I keep telling people that high-end Android phones and all iPhones since the 5S are basically fortresses (as long as they are kept up to date). This was now the time to check if this assumption hold true in practice. I began gathering material about any public vulnerability affecting Android or the Nexus 5X that could help me breaking the phone encryption.</p>
@@ -154,6 +179,35 @@
 				<br>Still, cracking a (potentially) strong password would not be accomplished through a pure brute-force effort and I started thinking about the most likely password patterns <i>G</i> could have used. 
 			</li>
 		</ul>
+
+		<div>
+                        <div style="border:solid; border-radius: 50% 50%; margin:auto; width:65%; background-color:aliceblue">
+                                <p style="text-align:center;"><strong>Remote access</strong></p>
+                                <div style="border:solid; margin:auto; width:50%; margin-bottom:3%; border-radius:30px; background-color:lavender">
+                                        <p style="text-align:center"><strong>Google Account</strong></p>
+                                        <p style="border-top:solid; font-size: 0.85em; text-align:center; margin-bottom:0; padding-top:5%; padding-bottom:5%; background-color:lavenderblush">Photos in cloud data?</p>
+                                        <p style="border-top:solid; font-size: 0.7em; text-align:center; margin-top:0; margin-bottom:0; background-color: lightcoral; border-radius: 0 0 27px 27px"><strong>Password unknown<br>Phone as second factor?</strong></p>
+
+                                </div>
+                        </div>
+                        <div style="border:solid; border-radius: 50% 50%; margin:auto; margin-top:1%; width: 95%; text-align:center; background-color:aliceblue">
+                                <p style="text-align:center;"><strong>Physical access</strong></p>
+                                <div style="border:solid; display:inline-block; width:40%; margin-bottom:8%; border-radius:30px; background-color:lavender">
+                                        <p style="text-align:center;"><strong>Nexus 5X</strong></p>
+                                        <p style="border-top:solid; font-size: 0.85em; text-align:center; margin-bottom:0; padding-top:5%; padding-bottom:5%; background-color:lavenderblush">Contains the photos<br>Fully encrypted storage<br>No public vulnerabilities found</p>
+                                        <p style="border-top:solid; font-size: 0.7em; text-align:center; margin-top:0; margin-bottom:0; background-color: lightcoral; border-radius: 0 0 30px 30px"><strong>Passcode unknown</strong></p>
+                                </div>
+                                <div style="border:solid; display:inline-block; width:40%; margin-bottom:8%; border-radius:30px; background-color:lavender">
+                                        <p style="text-align:center;"><strong>Windows 7 PC</strong></p>
+                                        <p style="border-top:solid; font-size: 0.85em; text-align:center; margin-bottom: 0; padding-top:5%; padding-bottom:5%; background-color:lavenderblush;">Unencrypted hard drive<br>No active session</p>
+                                        <p style="border-top:solid; font-size: 0.7em; text-align:center; margin-top:0; margin-bottom:0; background-color: #D0FFD0; border-radius: 0 0 30px 30px"><strong>NTLM hash of password</strong></p>
+                                </div>
+				<div style="border:solid; display:inline-block; width:40%; margin-bottom:8%; border-radius:30px; background-color:lavender">
+                                        <p style="text-align:center;"><strong>Collection #1</strong></p>
+					<p style="border-top:solid; font-size: 0.85em; text-align:center; margin-bottom: 0; padding-top:5%; padding-bottom:5%; background-color:#D0FFD0; border-radius: 0 0 30px 30px">One weak password found<br>of format abcd1234</p>
+                                </div>
+                        </div>
+                </div>
 
 		<p>In the middle of all that, I thought again of the Collection #1 password. More specifically its pattern: four letters and four numbers.</p>
 
